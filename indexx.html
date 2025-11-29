@@ -3,149 +3,228 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nutricious — Landing & QR Controller</title>
+  <title>Nutricious — Landing</title>
+  <meta name="description" content="Nutricious — Gym shakes & offers. Your protein, your way. Anytime.">
   <style>
     :root{
-      --bg:linear-gradient(180deg,#f2fff4,#eaf9ef);
-      --page-bg:#f6fff6;
+      --bg:linear-gradient(180deg,#f7fafc,#ffffff);
       --card:#ffffff;
-      --accent:#0f7a3a;
-      --accent-2:#2aa34a;
+      --accent:#2a9d8f;     /* teal */
+      --accent-2:#6dd3b0;   /* light teal */
       --muted:#556b58;
-      --accent-contrast:#fff;
-      --offer-bg:#fff7e6;
+      --accent-contrast:#ffffff;
       --offer-border:#ffd58a;
+      --radius:12px;
+      --maxw:1100px;
+      --base-font-size:18px;
+      --heading-scale:1.35;
     }
-    body{font-family:Inter, system-ui, -apple-system, Arial; background:var(--page-bg);margin:0;padding:18px;color:#0b2b1a}
-    .container{max-width:920px;margin:14px auto;padding:20px;background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(10,10,10,0.06);border-top:6px solid var(--accent-2)}
-    header{display:flex;gap:12px;align-items:center}
-    header img.logo{width:72px;height:72px;object-fit:contain;border-radius:12px;border:2px solid rgba(15,122,58,0.08)}
-    h1{margin:0;font-size:20px}
-    .tagline{color:var(--muted);margin-top:6px;font-weight:600}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:18px;margin-top:18px}
-    .card{background:var(--card);padding:14px;border-radius:10px;border:1px solid rgba(10,20,10,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:Inter, system-ui, -apple-system, Arial; background:var(--bg);margin:0;padding:22px;color:#072012;font-size:var(--base-font-size);line-height:1.45}
+    .wrap{max-width:var(--maxw);margin:0 auto;background:var(--card);border-radius:14px;padding:22px;box-shadow:0 10px 30px rgba(10,20,10,0.06);border-top:6px solid var(--accent-2)}
+    header{display:flex;gap:16px;align-items:center}
+    .logo{width:90px;height:90px;border-radius:12px;object-fit:contain;border:2px solid rgba(42,157,143,0.08)}
+    h1{margin:0;font-size:calc(var(--base-font-size) * var(--heading-scale));letter-spacing:0.6px}
+    .tag{color:var(--muted);font-weight:600;margin-top:6px;font-size:calc(var(--base-font-size) * 0.95)}
+    .layout{display:grid;grid-template-columns:1fr;gap:20px;margin-top:20px}
+    @media(min-width:980px){ .layout{grid-template-columns:1fr 360px} }
+    .card{background:linear-gradient(180deg,#ffffff,#fbfff9);padding:16px;border-radius:12px;border:1px solid rgba(10,20,10,0.03)}
     .menu-list{list-style:none;padding:0;margin:0}
-    .menu-list li{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #eef6ee}
-    label{display:block;font-size:13px;color:var(--muted);margin-top:10px}
-    input[type=text], textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e0e6e0}
-    .btn{background:var(--accent);color:var(--accent-contrast);padding:10px 12px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(15,122,58,0.12)}
-    .muted{color:var(--muted);font-size:13px}
-    .star{font-size:28px;cursor:pointer;color:#e6b422}
-    .qrwrap{text-align:center}
-    .admin-badge{font-size:12px;color:#fff;background:var(--accent);padding:6px 8px;border-radius:999px}
-    footer{margin-top:12px;font-size:13px;color:var(--muted)}
-    .small{font-size:12px;color:var(--muted)}
-    .admin-panel{display:none;}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .link-btn{background:white;border:1px solid #dfeee0;padding:8px;border-radius:8px;cursor:pointer}
-    .csv-list{max-height:140px;overflow:auto;padding:8px;background:#fcfff8;border-radius:8px;border:1px solid #eef7ee}
-
-    /* Offers banner */
-    .offers-banner{background:linear-gradient(90deg,var(--offer-bg),#fff3e6);border-radius:10px;padding:12px;border:2px solid var(--offer-border);margin-top:12px}
-    .offers-banner h4{margin:0;color:var(--accent);font-size:16px}
-    .offers-banner p{margin:6px 0 0;font-weight:700;color:#7a4a00}
-
-    /* emphasize offers inside aside */
-    .offers-highlight{background:linear-gradient(90deg, rgba(42,163,74,0.08), rgba(15,122,58,0.04));padding:12px;border-radius:8px;border:1px solid rgba(15,122,58,0.07)}
-    .offers-text{font-size:16px;font-weight:700;color:var(--accent)}
-
-    @media (max-width:900px){ .grid{grid-template-columns:1fr} header img.logo{width:64px;height:64px} }
+    .menu-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px dashed #eef6ee;font-size:calc(var(--base-font-size) * 1)}
+    .menu-item:last-child{border-bottom:none}
+    .small{font-size:13px;color:var(--muted)}
+    input[type=text], textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #e6efe6;font-size:var(--base-font-size)}
+    .btn{background:var(--accent);color:var(--accent-contrast);padding:12px 16px;border-radius:10px;border:0;cursor:pointer;box-shadow:0 8px 20px rgba(42,157,143,0.14);font-weight:700;font-size:calc(var(--base-font-size)*0.95)}
+    .link-btn{background:#fff;border:1px solid #e6efe6;padding:10px;border-radius:10px;cursor:pointer}
+    .offers-banner{background:linear-gradient(90deg,#fff7e6,#fff3e6);border-radius:10px;padding:14px;border:2px solid var(--offer-border);margin-top:8px}
+    .offers-text{font-size:16px;font-weight:800;color:#7a4a00}
+    .stars{font-size:28px;color:#e6b422;cursor:pointer}
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+    /* Admin modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+    .modal{background:#fff;border-radius:12px;max-width:920px;width:100%;padding:18px;max-height:90vh;overflow:auto}
+    .modal h3{margin-top:0;font-size:20px}
+    .modal .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:760px){ .modal .row{grid-template-columns:1fr} .logo{width:64px;height:64px} }
+    .admin-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    /* subtle utility */
+    .center{text-align:center}
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="wrap" role="main">
     <header>
-      <img class="logo" id="logoImg" src="https://via.placeholder.com/150x150.png?text=Nutricious" alt="logo">
+      <!-- Replace the src below with your GitHub-hosted logo URL or a base64 data URL -->
+      <!-- Example GitHub URL: https://raw.githubusercontent.com/<user>/<repo>/main/assets/logo.png -->
+      <img id="logoImg" class="logo" src="https://via.placeholder.com/300x300.png?text=Nutricious" alt="Nutricious logo">
       <div>
-        <h1>Nutricious <span class="admin-badge" id="envBadge">Live</span></h1>
-        <div class="tagline" id="tagline">Your protein, your way. Anytime.</div>
+        <h1>Nutricious <span id="envBadge" style="font-size:13px;margin-left:8px;color:var(--accent);font-weight:700">LIVE</span></h1>
+        <div id="tagline" class="tag">Your protein, your way. Anytime.</div>
       </div>
       <div style="margin-left:auto;text-align:right">
-        <div class="small">Quick admin</div>
-        <button class="link-btn" id="openAdmin">Open admin</button>
+        <div class="small">Admin</div>
+        <button id="openAdmin" class="link-btn">Open admin</button>
       </div>
     </header>
 
-    <div class="grid">
+    <div class="layout" aria-live="polite">
+      <!-- MAIN COLUMN -->
       <main>
-        <section class="card">
-          <h3>Menu</h3>
-          <ul class="menu-list" id="menuList">
-            <!-- menu items rendered here -->
-          </ul>
-          <div class="small muted">Prices & items are editable from Admin → Save → Generate QR.</div>
+        <section class="card" aria-labelledby="menuTitle">
+          <h2 id="menuTitle" style="margin:0 0 10px 0;font-size:20px">Menu</h2>
+          <ul id="menuList" class="menu-list" aria-live="polite"></ul>
+          <div class="small" style="margin-top:8px">Prices & items editable via admin.</div>
         </section>
 
-        <section class="card" style="margin-top:12px">
-          <h3>Feedback</h3>
-          <textarea id="feedbackText" rows="3" placeholder="Tell us about the shake, taste, service..." ></textarea>
-          <div style="margin-top:10px;display:flex;align-items:center;gap:10px">
-            <div id="stars" title="Rate us">
-              <span class="star" data-value="1">☆</span>
-              <span class="star" data-value="2">☆</span>
-              <span class="star" data-value="3">☆</span>
-              <span class="star" data-value="4">☆</span>
-              <span class="star" data-value="5">☆</span>
+        <section class="card" style="margin-top:14px" aria-labelledby="feedbackTitle">
+          <h2 id="feedbackTitle" style="margin:0 0 10px 0;font-size:20px">Feedback</h2>
+          <label class="small" for="feedbackText">Your feedback</label>
+          <textarea id="feedbackText" rows="3" placeholder="How was the shake / taste / service?"></textarea>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-top:12px">
+            <div id="stars" aria-label="rating" title="Rate us">
+              <span class="stars" data-value="1">☆</span>
+              <span class="stars" data-value="2">☆</span>
+              <span class="stars" data-value="3">☆</span>
+              <span class="stars" data-value="4">☆</span>
+              <span class="stars" data-value="5">☆</span>
             </div>
-            <button class="btn" id="submitFeedback">Send Feedback</button>
+            <button id="submitFeedback" class="btn">Submit</button>
+            <div id="feedbackToast" style="margin-left:8px;color:var(--muted);display:none">Thanks!</div>
           </div>
-          <div class="small muted" style="margin-top:8px">All feedback is stored locally and can be exported by admin.</div>
-        </section>
 
+          <div id="recentFeedback" style="margin-top:14px" class="small">No feedback yet.</div>
+        </section>
       </main>
 
-      <aside></aside>
+      <!-- RIGHT COLUMN -->
+      <aside>
+        <div class="card center">
+          <h3 style="margin:6px 0">Offers</h3>
+          <div class="offers-banner">
+            <div id="offersText" class="offers-text">FIRST USER: ₹10 OFF — LIMITED TIME</div>
+          </div>
+          <div class="small" style="margin-top:10px">Use the admin to change offers, logo and menu.</div>
+        </div>
+
+        <div class="card center" style="margin-top:14px">
+          <h4 style="margin:8px 0">Contact</h4>
+          <div class="small">Add WhatsApp or phone contact in the admin if you want ordering via chat.</div>
+        </div>
+      </aside>
     </div>
 
     <footer>
-      This single-file page stores editable configuration in the URL hash and localStorage so the QR can point to a shareable version of this same page. Use the admin panel to change items → click "Generate QR" to update.
+      <!-- footer intentionally left minimal -->
     </footer>
   </div>
 
-  <!-- QR library (lightweight) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Admin modal (hidden by default) -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <h3>Admin — Edit Site</h3>
+      <div class="row">
+        <div>
+          <label>Logo URL (or paste a base64 data URL)</label>
+          <input type="text" id="adminLogo" placeholder="https://.../logo.png">
+
+          <label style="margin-top:10px">Tagline</label>
+          <input type="text" id="adminTagline" placeholder="Your protein, your way">
+
+          <label style="margin-top:10px">Offers text</label>
+          <input type="text" id="adminOffers" placeholder="FIRST USER: ₹10 OFF">
+        </div>
+
+        <div>
+          <label>Menu (one item per line, format: name|price)</label>
+          <textarea id="adminMenuText" rows="8">Protein Shake|149
+Pre-Workout|99
+Creatine|69</textarea>
+
+          <label style="margin-top:10px">Admin password (optional)</label>
+          <input type="text" id="adminPassword" placeholder="set a password (default: admin)">
+        </div>
+      </div>
+
+      <div class="admin-controls" style="margin-top:14px">
+        <button id="saveConfig" class="btn">Save & Apply</button>
+        <button id="exportConfig" class="link-btn">Export config</button>
+        <button id="importConfig" class="link-btn">Import config</button>
+        <button id="publishBtn" class="link-btn">Publish (create link)</button>
+        <button id="closeAdmin" class="link-btn">Close</button>
+      </div>
+
+      <hr />
+
+      <div>
+        <h4 style="margin:8px 0">Feedback (local)</h4>
+        <div id="feedbackListAdmin" style="max-height:220px;overflow:auto;padding:8px;border-radius:8px;border:1px solid #eef7ee;background:#fcfff8">No feedback yet</div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button id="exportFeedback" class="link-btn">Export CSV</button>
+          <button id="clearFeedback" class="link-btn">Clear feedback</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Default config
+    /*********************
+     * Configuration code
+     *********************/
     const defaultConfig = {
-      logo: 'https://via.placeholder.com/150x150.png?text=Nutricious',
+      logo: 'https://via.placeholder.com/300x300.png?text=Nutricious',
       tagline: 'Your protein, your way. Anytime.',
-      menu: [ {name:'Whey Protein Shake', price:'150'}, {name:'Pre-Workout Shot', price:'89'} ],
-      offers: 'FIRST USER: ₹10 OFF. MEMBERS: Buy 10 → Get 1 FREE',
+      menu: [
+        {name:'Protein Shake', price:'149'},
+        {name:'Pre-Workout', price:'99'},
+        {name:'Creatine', price:'69'}
+      ],
+      offers: 'FIRST USER: ₹10 OFF — LIMITED TIME',
       env: 'live'
     };
 
-    // Utilities
     function saveLocal(cfg){ localStorage.setItem('nutricious_cfg', JSON.stringify(cfg)); }
-    function loadLocal(){ const s = localStorage.getItem('nutricious_cfg'); return s ? JSON.parse(s) : null; }
+    function loadLocal(){ try { const s = localStorage.getItem('nutricious_cfg'); return s ? JSON.parse(s) : null; } catch(e){ return null; } }
 
-    function applyConfig(cfg){
-      document.getElementById('logoImg').src = cfg.logo;
-      document.getElementById('tagline').textContent = cfg.tagline;
-      document.getElementById('offers').textContent = cfg.offers;
-      document.getElementById('envBadge').textContent = cfg.env === 'live' ? 'Live' : cfg.env;
+    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-      // render menu
-      const menuList = document.getElementById('menuList'); menuList.innerHTML='';
+    function renderMenu(cfg){
+      const menuList = document.getElementById('menuList');
+      menuList.innerHTML = '';
       cfg.menu.forEach(item=>{
         const li = document.createElement('li');
-        const name = document.createElement('div'); name.textContent = item.name;
-        const price = document.createElement('div'); price.textContent = '₹'+item.price;
-        li.appendChild(name); li.appendChild(price); menuList.appendChild(li);
+        li.className = 'menu-item';
+        li.innerHTML = `<div>${escapeHtml(item.name)}</div><div>₹${escapeHtml(item.price)}</div>`;
+        menuList.appendChild(li);
       });
-
-      // admin textarea values
-      document.getElementById('adminLogo').value = cfg.logo;
-      document.getElementById('adminTagline').value = cfg.tagline;
-      document.getElementById('adminMenuJson').value = JSON.stringify(cfg.menu, null, 2);
-      document.getElementById('adminOffers').value = cfg.offers;
-
-      // also highlight offers area visually
-      const offersEl = document.getElementById('offers'); if(offersEl) offersEl.innerHTML = cfg.offers;
     }
 
+    function applyConfig(cfg){
+      if(!cfg) return;
+      const logo = document.getElementById('logoImg');
+      if(logo && cfg.logo) logo.src = cfg.logo;
+      const tagline = document.getElementById('tagline');
+      if(tagline && cfg.tagline) tagline.textContent = cfg.tagline;
+      const offersEl = document.getElementById('offersText');
+      if(offersEl && cfg.offers) offersEl.textContent = cfg.offers;
+      renderMenu(cfg);
+
+      // populate admin fields
+      const adminLogo = document.getElementById('adminLogo'); if(adminLogo) adminLogo.value = cfg.logo || '';
+      const adminTagline = document.getElementById('adminTagline'); if(adminTagline) adminTagline.value = cfg.tagline || '';
+      const adminOffers = document.getElementById('adminOffers'); if(adminOffers) adminOffers.value = cfg.offers || '';
+      const adminMenuText = document.getElementById('adminMenuText'); if(adminMenuText) adminMenuText.value = (cfg.menu||[]).map(i=>`${i.name}|${i.price}`).join('\\n');
+    }
+
+    // encode/decode config to URL hash
     function encodeConfigToHash(cfg){
-      const s = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
-      return '#cfg='+s;
+      try {
+        const s = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
+        return '#cfg=' + s;
+      } catch(e){
+        return '';
+      }
     }
     function decodeConfigFromHash(){
       try{
@@ -154,133 +233,155 @@
         const b = h.slice(5);
         const json = decodeURIComponent(escape(atob(b)));
         return JSON.parse(json);
-      }catch(e){return null}
+      }catch(e){ return null; }
     }
 
-    // QR generation
-    let qrObj = null;
-    function generateQR(url){
-      const container = document.getElementById('qrcode'); container.innerHTML='';
-      // use external API to make downloadable QR image (and also draw via qrcodejs)
-      const encoded = encodeURIComponent(url);
-      const apiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data='+encoded;
-      // show image
-      const img = document.createElement('img'); img.src = apiUrl; img.alt='QR'; img.width=260; img.height=260; img.style.borderRadius='10px';
-      container.appendChild(img);
-      // also keep a qrcodejs object hidden for fallback
-      // (not required but left here if needed)
-      qrObj = apiUrl; // store url for download
+    /*********************
+     * Feedback storage
+     *********************/
+    function loadFeedback(){ try { return JSON.parse(localStorage.getItem('nutricious_feedback')||'[]'); } catch(e){ return []; } }
+    function saveFeedback(arr){ try { localStorage.setItem('nutricious_feedback', JSON.stringify(arr)); } catch(e){} }
+
+    function renderFeedbackList(){
+      const arr = loadFeedback();
+      const el = document.getElementById('recentFeedback');
+      const adminEl = document.getElementById('feedbackListAdmin');
+      if(!arr.length){ if(el) el.textContent = 'No feedback yet.'; if(adminEl) adminEl.textContent = 'No feedback yet'; return; }
+      if(el) el.innerHTML = arr.slice().reverse().slice(0,6).map(f => `<div style="margin-bottom:8px"><strong>${f.stars}★</strong> · ${new Date(f.ts).toLocaleString()}<div class="small">${escapeHtml(f.text)}</div></div>`).join('');
+      if(adminEl) adminEl.innerHTML = arr.slice().reverse().map(f => `<div style="margin-bottom:8px"><strong>${f.stars}★</strong> · ${new Date(f.ts).toLocaleString()}<div class="small">${escapeHtml(f.text)}</div></div>`).join('');
     }
 
-    // feedback handling
-    function loadFeedback(){ const fb = JSON.parse(localStorage.getItem('nutricious_feedback')||'[]'); return fb; }
-    function saveFeedback(arr){ localStorage.setItem('nutricious_feedback', JSON.stringify(arr)); }
-    function addFeedback(text,stars){ const arr = loadFeedback(); arr.push({text,stars,ts:new Date().toISOString()}); saveFeedback(arr); renderFeedbackList(); }
-    function renderFeedbackList(){ const arr = loadFeedback(); const el = document.getElementById('feedbackList'); if(arr.length===0){ el.textContent='No feedback yet'; return;} el.innerHTML = ''; arr.slice().reverse().forEach(f => {
-        const d = document.createElement('div'); d.style.marginBottom='6px'; d.innerHTML = `<b>${f.stars}★</b> · ${new Date(f.ts).toLocaleString()}<div class="small">${escapeHtml(f.text)}</div>`; el.appendChild(d);
-      }); }
-
-    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    // init
+    /*********************
+     * Init
+     *********************/
     (function init(){
       const hashCfg = decodeConfigFromHash();
       const localCfg = loadLocal();
       const cfg = hashCfg || localCfg || defaultConfig;
       applyConfig(cfg);
-      // generate QR for this page + config in hash
-      const newHash = encodeConfigToHash(cfg);
-      const fullUrl = location.origin + location.pathname + newHash;
-      generateQR(fullUrl);
       renderFeedbackList();
-
-      // star rating ui
-      const stars = document.querySelectorAll('.star'); let selectedStars = 0;
-      stars.forEach(s => {
-        s.addEventListener('mouseover', ()=>{ const v = +s.dataset.value; highlightStars(v); });
-        s.addEventListener('mouseout', ()=>{ highlightStars(selectedStars); });
-        s.addEventListener('click', ()=>{ selectedStars = +s.dataset.value; highlightStars(selectedStars); });
-      });
-      function highlightStars(n){ stars.forEach(s=>{ s.textContent = (+s.dataset.value <= n) ? '★' : '☆'; }); }
-
-      // feedback submit
-      document.getElementById('submitFeedback').addEventListener('click', ()=>{
-        const text = document.getElementById('feedbackText').value.trim();
-        if(!text){ alert('Please write a short feedback.'); return; }
-        addFeedback(text, selectedStars||0);
-        document.getElementById('feedbackText').value=''; selectedStars=0; highlightStars(0);
-        alert('Thanks for your feedback!');
-      });
-
-      // admin open
-      document.getElementById('openAdmin').addEventListener('click', ()=>{
-        const pwd = localStorage.getItem('nutricious_admin_pwd') || 'admin';
-        const input = prompt('Enter admin password to open panel:');
-        if(input === pwd){ document.getElementById('adminPanel').style.display='block'; window.scrollTo({top:document.getElementById('adminPanel').offsetTop, behavior:'smooth'}); }
-        else alert('Wrong password');
-      });
-
-      // save config
-      document.getElementById('saveConfig').addEventListener('click', ()=>{
-        try{
-          const newCfg = {
-            logo: document.getElementById('adminLogo').value || defaultConfig.logo,
-            tagline: document.getElementById('adminTagline').value || defaultConfig.tagline,
-            menu: JSON.parse(document.getElementById('adminMenuJson').value),
-            offers: document.getElementById('adminOffers').value || defaultConfig.offers,
-            env: 'live'
-          };
-          const pwdField = document.getElementById('adminPassword').value;
-          if(pwdField){ localStorage.setItem('nutricious_admin_pwd', pwdField); alert('Admin password updated'); }
-          saveLocal(newCfg);
-          applyConfig(newCfg);
-          alert('Config saved locally. Click Generate QR to update shareable QR.');
-        }catch(e){ alert('Invalid menu JSON, fix it.'); }
-      });
-
-      // generate QR button
-      document.getElementById('regenQR').addEventListener('click', ()=>{
-        const cfg = loadLocal() || defaultConfig;
-        const newHash = encodeConfigToHash(cfg);
-        const fullUrl = location.origin + location.pathname + newHash;
-        // replace URL hash (without reloading)
-        history.replaceState(null, '', fullUrl);
-        generateQR(fullUrl);
-        alert('QR updated — scan to open the shareable page with current menu and offers.');
-      });
-
-      // download QR
-      document.getElementById('downloadQR').addEventListener('click', ()=>{
-        if(!qrObj){ alert('No QR found'); return; }
-        // open image URL in new tab so user can save
-        window.open(qrObj, '_blank');
-      });
-
-      document.getElementById('openLink').addEventListener('click', ()=>{
-        const cfg = loadLocal() || defaultConfig;
-        const fullUrl = location.origin + location.pathname + encodeConfigToHash(cfg);
-        window.open(fullUrl, '_blank');
-      });
-
-      // export/import config
-      document.getElementById('exportConfig').addEventListener('click', ()=>{
-        const cfg = loadLocal() || defaultConfig; const blob = new Blob([JSON.stringify(cfg, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = 'nutricious-config.json'; a.click(); URL.revokeObjectURL(url);
-      });
-      document.getElementById('importConfig').addEventListener('click', ()=>{
-        const data = prompt('Paste JSON config here'); if(!data) return; try{ const cfg = JSON.parse(data); saveLocal(cfg); applyConfig(cfg); alert('Config imported. Click Generate QR to update.'); }catch(e){ alert('Invalid JSON'); }});
-
-      // export feedback
-      document.getElementById('exportFeedback').addEventListener('click', ()=>{
-        const arr = loadFeedback(); if(arr.length===0){ alert('No feedback'); return; }
-        const csv = ['ts,stars,feedback'].concat(arr.map(r=>`"${r.ts}",${r.stars},"${(r.text||'').replace(/"/g,'""')}"`)).join('
-');
-        const blob = new Blob([csv], {type:'text/csv'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'feedback.csv'; a.click(); URL.revokeObjectURL(url);
-      });
-
-      document.getElementById('clearFeedback').addEventListener('click', ()=>{ if(confirm('Clear all local feedback?')){ localStorage.removeItem('nutricious_feedback'); renderFeedbackList(); }});
-
     })();
+
+    /*********************
+     * Rating UI
+     *********************/
+    const starEls = document.querySelectorAll('.stars');
+    let selectedStars = 0;
+    starEls.forEach(s=>{
+      s.addEventListener('mouseover', ()=>{ highlightStars(+s.dataset.value); });
+      s.addEventListener('mouseout', ()=>{ highlightStars(selectedStars); });
+      s.addEventListener('click', ()=>{ selectedStars = +s.dataset.value; highlightStars(selectedStars); });
+    });
+    function highlightStars(n){
+      starEls.forEach(s => s.textContent = (+s.dataset.value <= n) ? '★' : '☆');
+    }
+
+    document.getElementById('submitFeedback').addEventListener('click', ()=>{
+      const text = document.getElementById('feedbackText').value.trim();
+      if(!text){ alert('Please write a short feedback'); return; }
+      const arr = loadFeedback();
+      arr.push({text, stars: selectedStars || 0, ts: new Date().toISOString()});
+      saveFeedback(arr);
+      renderFeedbackList();
+      document.getElementById('feedbackText').value = '';
+      selectedStars = 0; highlightStars(0);
+      const t = document.getElementById('feedbackToast'); if(t){ t.style.display='inline'; setTimeout(()=>t.style.display='none',1500); }
+    });
+
+    /*********************
+     * Admin modal controls
+     *********************/
+    const openAdminBtn = document.getElementById('openAdmin');
+    const modal = document.getElementById('modalBackdrop');
+    const closeAdminBtn = document.getElementById('closeAdmin');
+
+    openAdminBtn.addEventListener('click', ()=>{ modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; });
+
+    closeAdminBtn.addEventListener('click', ()=>{ modal.style.display = 'none'; document.body.style.overflow = 'auto'; });
+
+    // Save config - reads admin fields, validates menu
+    document.getElementById('saveConfig').addEventListener('click', ()=>{
+      try{
+        const logo = document.getElementById('adminLogo').value || defaultConfig.logo;
+        const tagline = document.getElementById('adminTagline').value || defaultConfig.tagline;
+        const offers = document.getElementById('adminOffers').value || defaultConfig.offers;
+        const menuText = document.getElementById('adminMenuText').value || '';
+        const menu = menuText.split('\\n').map(l=>{
+          const parts = l.split('|').map(s=>s.trim());
+          return {name: parts[0] || 'Item', price: parts[1] || '0'};
+        }).filter(m => m.name);
+        const pwd = document.getElementById('adminPassword').value;
+        if(pwd) localStorage.setItem('nutricious_admin_pwd', pwd);
+        const newCfg = { logo, tagline, offers, menu, env:'live' };
+        saveLocal(newCfg);
+        applyConfig(newCfg);
+        alert('Configuration saved locally. Click Publish to create a shareable link (for QR).');
+      } catch(e){ alert('Could not save config: ' + (e && e.message ? e.message : 'unknown error')); }
+    });
+
+    // Export/import config
+    document.getElementById('exportConfig').addEventListener('click', ()=>{
+      const cfg = loadLocal() || defaultConfig;
+      const blob = new Blob([JSON.stringify(cfg,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'nutricious-config.json'; a.click(); URL.revokeObjectURL(url);
+    });
+    document.getElementById('importConfig').addEventListener('click', ()=>{
+      const data = prompt('Paste JSON config here');
+      if(!data) return;
+      try{ const cfg = JSON.parse(data); saveLocal(cfg); applyConfig(cfg); alert('Config imported'); } catch(e){ alert('Invalid JSON'); }
+    });
+
+    /*********************
+     * Publish: create shareable URL and copy to clipboard (safe)
+     *********************/
+    document.getElementById('publishBtn').addEventListener('click', async ()=>{
+      const cfg = loadLocal() || defaultConfig;
+      const hash = encodeConfigToHash(cfg);
+      const url = location.origin + location.pathname + hash;
+      // update URL without reload
+      try { history.replaceState(null, '', url); } catch(e){}
+      // Attempt to copy to clipboard with safe fallbacks
+      try {
+        if(navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+          await navigator.clipboard.writeText(url);
+          alert('Published and copied to clipboard. Use this URL to generate your QR.');
+        } else {
+          // fallback: use an input element + execCommand (older API)
+          const ta = document.createElement('textarea'); ta.value = url; ta.style.position='fixed'; ta.style.left='-9999px';
+          document.body.appendChild(ta); ta.select();
+          try {
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            alert('Published and copied (fallback). Use this URL to generate your QR.');
+          } catch(e){
+            document.body.removeChild(ta);
+            // final fallback: prompt for manual copy
+            prompt('Publish URL (copy manually):', url);
+          }
+        }
+      } catch(err){
+        // if anything fails, prompt user to copy manually
+        try { prompt('Publish URL (copy manually):', url); } catch(e){ alert('Published. URL: ' + url); }
+      }
+    });
+
+    /*********************
+     * Feedback export/clear
+     *********************/
+    document.getElementById('exportFeedback').addEventListener('click', ()=>{
+      const arr = loadFeedback(); if(!arr.length){ alert('No feedback'); return; }
+      const csv = ['ts,stars,feedback'].concat(arr.map(r => `"${r.ts}",${r.stars},"${(r.text||'').replace(/"/g,'""')}"`)).join('\\n');
+      const blob = new Blob([csv], {type:'text/csv'}); const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'feedback.csv'; a.click(); URL.revokeObjectURL(url);
+    });
+    document.getElementById('clearFeedback').addEventListener('click', ()=>{
+      if(confirm('Clear all local feedback?')){ localStorage.removeItem('nutricious_feedback'); renderFeedbackList(); }
+    });
+
+    /*********************
+     * Utility: If page loads with cfg in hash, apply it (done above on init)
+     *********************/
   </script>
 </body>
 </html>
